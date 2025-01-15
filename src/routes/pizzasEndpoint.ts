@@ -4,8 +4,8 @@ import { pizzasCollection } from "../data";
 const pizzasEndpoint = new Hono();
 
 pizzasEndpoint.get("/:id", (c) => {
-  const id = c.req.param('id');
-  const pizza = pizzasCollection.find((element) => element.id === parseInt(id));
+  const id = parseInt(c.req.param('id'));
+  const pizza = pizzasCollection.find((element) => element.id === id);
   return c.json({ pizza });
   //return c.json({ pizza: { id: Number.parseInt(id) } }); // à remplacer par la vraie pizza issue du tableau pizzasCollection
 });
@@ -27,7 +27,8 @@ pizzasEndpoint.get("/", (c) => {
   }
 
   if(price){
-    pizzas = pizzas.filter(p=>p.price===Number(price));
+    const priceNumber = Number(price);
+    pizzas = pizzas.filter(p=>p.price===priceNumber);
   }
 
   return c.json({ pizzas });
