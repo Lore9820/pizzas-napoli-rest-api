@@ -1,0 +1,17 @@
+meta {
+  name: Read Pizzas Collection
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/pizzas
+  body: none
+  auth: none
+}
+
+assert {
+  res.body: isJson
+  res.status: eq 200
+  res.body.pizzas: isArray
+}

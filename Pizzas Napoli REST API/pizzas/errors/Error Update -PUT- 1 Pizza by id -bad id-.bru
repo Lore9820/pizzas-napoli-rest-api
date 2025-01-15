@@ -1,0 +1,25 @@
+meta {
+  name: Error Update -PUT- 1 Pizza by id -bad id-
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:3000/pizzas/0
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id":0,
+    "name": "",
+    "ingredients": [],
+    "price": 10
+  }
+}
+
+assert {
+  res.status: eq 400
+  res.body: eq id param in URI should be greater than 0
+}

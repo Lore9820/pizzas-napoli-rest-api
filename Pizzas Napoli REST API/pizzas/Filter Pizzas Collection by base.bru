@@ -1,0 +1,44 @@
+meta {
+  name: Filter Pizzas Collection by base
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:3000/pizzas?base=Tomate
+  body: none
+  auth: none
+}
+
+params:query {
+  base: Tomate
+  ~price: 6
+  ~name: Marinara
+  ~base: Crème
+  ~base: Nature
+}
+
+assert {
+  res.body: isJson
+  res.status: eq 200
+  res.body.pizzas: isArray
+}
+
+tests {
+  function getQueryParams(url) {
+    const paramArr = url.slice(url.indexOf('?') + 1).split('&');
+    const params = {};
+    paramArr.map(param => {
+        const [key, val] = param.split('=');
+        params[key] = decodeURIComponent(val);
+    })
+    return params;
+  }
+  
+  test("HTTP Request query string base should be Tomate, Crème or Nature", ()=>expect(["Tomate","Crème","Nature"]).to.contain(getQueryParams(req.getUrl()).base))
+  
+  test("HTTP Request query string length should be equal to 1", ()=>expect(Object.keys(getQueryParams(req.getUrl())).length
+  ).to.lte(2))
+  
+  test("HTTP Request query string base should be equal to each pizza's base inside HTTP Response", ()=>expect(res.body.pizzas.every(p=>p.base===getQueryParams(req.getUrl()).base)).to.equal(true))
+}

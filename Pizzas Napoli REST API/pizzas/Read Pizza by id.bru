@@ -1,0 +1,24 @@
+meta {
+  name: Read Pizza by id
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:3000/pizzas/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.body: isJson
+  res.status: eq 200
+}
+
+tests {
+  
+  test("pizza id in URL should be equal to pizza id in HTTP Response body", ()=> 
+    expect(res.getBody().pizza.id).to.equal(Number(req.url.split("/").at(-1)))
+  );
+  
+}

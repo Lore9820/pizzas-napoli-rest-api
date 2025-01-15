@@ -1,0 +1,25 @@
+meta {
+  name: Error Update -PUT- 1 Pizza by id -missing name-
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:3000/pizzas/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id":1,
+    "name": "",
+    "ingredients": [],
+    "price": 10,
+    "base":""
+  }
+}
+
+assert {
+  res.status: eq 400
+}

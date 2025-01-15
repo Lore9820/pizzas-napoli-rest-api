@@ -1,0 +1,16 @@
+meta {
+  name: Delete 1 Pizza by id
+  type: http
+  seq: 8
+}
+
+delete {
+  url: http://localhost:3000/pizzas/1
+  body: none
+  auth: none
+}
+
+assert {
+  ~res.status: eq 204
+  ~res.body: isEmpty
+}

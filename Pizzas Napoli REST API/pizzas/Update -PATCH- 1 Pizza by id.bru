@@ -1,0 +1,32 @@
+meta {
+  name: Update -PATCH- 1 Pizza by id
+  type: http
+  seq: 7
+}
+
+patch {
+  url: http://localhost:3000/pizzas/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id":1,
+    "name": "Boscaiola",
+    "ingredients": ["champignons","jambon cru"],
+    "price": 12,
+    "base":"Crème"
+  }
+}
+
+assert {
+  res.status: eq 200
+  req.body: isNotEmpty
+}
+
+tests {
+    test("id inside HTTP Response body should be equal to id inside HTTP request body", ()=>expect(res.body.pizza.id).to.equal(req.body.id))
+      
+    test("id inside HTTP Response body should be equal to id inside HTTP request URL", ()=>expect(res.body.pizza.id).to.equal(Number(req.getUrl().split("/").reverse()[0])))
+}

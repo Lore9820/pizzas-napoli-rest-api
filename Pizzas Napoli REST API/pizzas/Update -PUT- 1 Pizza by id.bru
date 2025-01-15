@@ -1,0 +1,44 @@
+meta {
+  name: Update -PUT- 1 Pizza by id
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:3000/pizzas/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id":1,
+    "name": "Margherita",
+    "base":"Tomate",
+    "ingredients": ["basilic","mozzarella di bufala"],
+    "price": 10
+  }
+}
+
+assert {
+  req.body: isNotEmpty
+  req.body.id: isDefined
+  req.body: isJson
+  res.status: eq 200
+}
+
+tests {
+  test("id inside response body should be equal to id inside response", ()=>expect(res.body.pizza.id).to.equal(req.body.id))
+      
+  test("id inside response body should be equal to id inside request URL", ()=>expect(res.body.pizza.id).to.equal(Number(req.getUrl().split("/").reverse()[0])))
+  
+  test("pizza.name inside response body should be equal to pizza name inside response", ()=>expect(res.body.pizza.name).to.equal(req.body.name))
+  
+  test("pizza.price inside response body should be equal to pizza price inside response", ()=>expect(res.body.pizza.price).to.equal(req.body.price))
+  
+  test("pizza.base inside response body should be equal to pizza base inside response", ()=>expect(res.body.pizza.base).to.equal(req.body.base))
+  
+  test("pizza.ingredients length inside response body should be equal to pizza ingredients length inside response", ()=>expect(res.body.pizza.ingredients.length).to.equal(req.body.ingredients.length))
+  
+  test("pizza.ingredients inside response body should be equal to pizza ingredients inside response", ()=>expect(JSON.stringify(res.body.pizza.ingredients)).to.equal(JSON.stringify(req.body.ingredients)))
+}
