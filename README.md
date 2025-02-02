@@ -8,17 +8,19 @@ __API REST__ proposant des fonctionnalités basiques de type CRUD, développée 
 
 ## Commandes utiles
 
-Installation des dépendances NPM :
+- Installation des dépendances NPM :
 
-```sh
-bun install
-```
+$ `bun install`
 
-Démarrage de l'API :
+- Démarrage de l'API :
 
-```sh
-bun run dev
-```
+$ `bun run dev`
+
+- Création des tables dans la base de données SQLite :
+$ `bun run db:createSchema`
+
+- Remplissage des tables dans la base de données SQLite :
+$ `bun run db:seedData`
 
 Adresse locale de l'API : <http://localhost:3000>
 
