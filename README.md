@@ -1,4 +1,4 @@
-# Pizzas Napoli 🍕 REST API
+# 🍕 Pizzas Napoli 🇮🇹 REST API 🍕
 
 *****************************************************
 ------------> Projet modèle à compléter <------------

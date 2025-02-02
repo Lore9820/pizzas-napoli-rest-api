@@ -1,0 +1,15 @@
+meta {
+  name: Error Read Pizza by id (unfound id)
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:3000/pizzas/666
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

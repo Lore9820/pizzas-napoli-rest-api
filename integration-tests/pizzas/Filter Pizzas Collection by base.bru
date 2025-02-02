@@ -5,14 +5,13 @@ meta {
 }
 
 get {
-  url: http://localhost:3000/pizzas?base=Tomate&gauffre=chocolat
+  url: http://localhost:3000/pizzas?base=Tomate
   body: none
   auth: none
 }
 
 params:query {
   base: Tomate
-  gauffre: chocolat
   ~base: Crème
   ~base: Nature
 }
@@ -21,6 +20,7 @@ assert {
   res.body: isJson
   res.status: eq 200
   res.body.pizzas: isArray
+  res.body.pizzas.length: gte 0
 }
 
 tests {

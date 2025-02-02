@@ -1,34 +1,39 @@
 import { Hono } from "hono";
 import { pizzasCollection } from "../data";
+import { HTTPException } from "hono/http-exception";
 
 const pizzasEndpoint = new Hono();
 
 pizzasEndpoint.get("/:id", (c) => {
-  const id = parseInt(c.req.param('id'));
-  const pizza = pizzasCollection.find((element) => element.id === id);
+  const id: number = parseInt(c.req.param("id"));
+
+  //si la conversion de l'id ne permet pas d'obtenir un nombre (undefined, null ou NaN)
+  if (!id) {
+    //on déclenche une exception qui sera convertie en réponse HTTP avec le code 400
+    throw new HTTPException(400);
+  }
+
+  //récupère l'id dans le path de l'URI
+  //on convertit l'id en nombre
+  const pizza = pizzasCollection.find((p) => p.id === id);
+  //on cherche la pizza dont l'id est égal au paramètre id récupéré
+
   return c.json({ pizza });
-  //return c.json({ pizza: { id: Number.parseInt(id) } }); // à remplacer par la vraie pizza issue du tableau pizzasCollection
 });
 
 pizzasEndpoint.get("/", (c) => {
-  const query = c.req.query();
-  console.log(query); //retourne un objet avec pour chaque variable dans l'URL, une clé dans l'objet du même nom
-
-  const basePizza = query.base; //accès direct à la clé base (si elle existe)
-  console.log(basePizza);
-
   const { base, price } = c.req.query(); //création dynamique d'une variable base, par destructuration de l'objet retourné par c.req.query()
-  console.log(base);
 
   let pizzas = pizzasCollection;
 
-  if(base){
-     pizzas = pizzas.filter(p=>p.base===base);
+  if (base) {
+    pizzas = pizzas.filter((p) => p.base === base);
   }
 
-  if(price){
+
+  if (price) {
     const priceNumber = Number(price);
-    pizzas = pizzas.filter(p=>p.price===priceNumber);
+    pizzas = pizzas.filter((p) => p.price === priceNumber);
   }
 
   return c.json({ pizzas });
