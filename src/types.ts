@@ -3,5 +3,6 @@ export type Pizza = {
   name: string;
   ingredients: string[];
   price: number;
-  base: "Tomate" | "Crème" | "Nature";
+
+  base: "Nature" | "Tomate" | "Crème";
 };

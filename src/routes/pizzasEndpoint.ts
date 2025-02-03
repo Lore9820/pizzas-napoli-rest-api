@@ -1,57 +1,22 @@
 import { Hono } from "hono";
-//import { pizzasCollection } from "../data";
 import { HTTPException } from "hono/http-exception";
-import { Database } from "bun:sqlite";
-import type { Pizza } from "../types";
 import { connectDatabase } from "../db/database";
+import { PizzaEntity } from "../entities";
 
-const pizzasEndpoint = new Hono();
-const dbPath = "./pizzas-napoli.db";
+const route = new Hono();
 
-pizzasEndpoint.get("/:id", (c) => {
-  //récupère l'id dans le path de l'URI
-  //on convertit l'id en nombre
-  const id: number = parseInt(c.req.param("id"));
-
-  //si la conversion de l'id ne permet pas d'obtenir un nombre (undefined, null ou NaN)
-  if (!id) {
-    //on déclenche une exception qui sera convertie en réponse HTTP avec le code 400
-    throw new HTTPException(400);
-  }
-
-  //on cherche la pizza dont l'id est égal au paramètre id récupéré
-
+route.get("/", (c) => {
   try {
     const db = connectDatabase();
 
-    const query = await db.query("SELECT * FROM pizzas").as(Pizza);
-    //const pizzas = query.all();
-    const pizza_demande = query.find((p:Pizza) => p.id === id);
+    const query = db.query("SELECT * FROM pizzas").as(PizzaEntity);
+    const result = query.all();
 
-    return pizza_demande;
-
+    return c.json({ pizzas: result }, 200);
   } catch (error) {
     console.error(error);
+    throw new HTTPException(500);
   }
-
 });
 
-// pizzasEndpoint.get("/", (c) => {
-//   const { base, price } = c.req.query(); //création dynamique d'une variable base, par destructuration de l'objet retourné par c.req.query()
-
-//   let pizzas = pizzasCollection;
-
-//   if (base) {
-//     pizzas = pizzas.filter((p) => p.base === base);
-//   }
-
-
-//   if (price) {
-//     const priceNumber = Number(price);
-//     pizzas = pizzas.filter((p) => p.price === priceNumber);
-//   }
-
-//   return c.json({ pizzas });
-// });
-
-export default pizzasEndpoint;
+export default route;
