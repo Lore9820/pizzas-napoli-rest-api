@@ -2,8 +2,6 @@ import { Hono } from "hono";
 import { connectDatabase, createSchema, seedData } from "./db/database";
 import pizzasEndpoint from "./routes/pizzasEndpoint";
 
-import pizzasEndpoint from "./routes/pizzasEndpoint";
-
 const app = new Hono();
 
 app.get("/", (c) => {
