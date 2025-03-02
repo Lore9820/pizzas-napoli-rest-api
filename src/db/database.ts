@@ -12,20 +12,13 @@ export function connectDatabase(): Database {
 }
 
 //création des tables de données
-export function createSchema() {
+export async function createSchema() {
   let db;
 
-  const sql = `
-        CREATE TABLE IF NOT EXISTS pizzas(
-            id integer PRIMARY KEY NOT NULL,
-            name text,
-            price real,
-            ingredients blob,
-            base text
-        )`;
-
   try {
-    db = new Database(dbPath);
+    const sqlSchemaFile = Bun.file("src/db/sql/01-schema.sql");
+    const sql = await sqlSchemaFile.text();
+    db = connectDatabase();
     db.exec(sql);
   } catch (error) {
     console.error(error);
@@ -35,20 +28,13 @@ export function createSchema() {
 }
 
 //remplissage de la base de données
-export function seedData() {
+export async function seedData() {
   let db;
 
-  const sql = `
-    INSERT INTO "main"."pizzas" ("id", "name", "price", "ingredients", "base") VALUES ('1', 'Margherita', '7.0', '["mozzarella","basilic"]', 'Tomate');
-    INSERT INTO "main"."pizzas" ("id", "name", "price", "ingredients", "base") VALUES ('2', 'Marinara', '6.0', '["ail","origan"]', 'Tomate');
-    INSERT INTO "main"."pizzas" ("id", "name", "price", "ingredients", "base") VALUES ('3', 'Quattro Stagioni', '12.0', '["jambon","mozzarella","champignons","coeurs d''artichaut"]', 'Tomate');
-    INSERT INTO "main"."pizzas" ("id", "name", "price", "ingredients", "base") VALUES ('4', 'Quattro Stagioni', '12.0', '["jambon","mozzarella","champignons","coeurs d''artichaut","olives"]', 'Tomate');
-    INSERT INTO "main"."pizzas" ("id", "name", "price", "ingredients", "base") VALUES ('5', 'Boscaiola', '12.0', '["jambon cru","champignons","mozzarella"]', 'Crème');
-    INSERT INTO "main"."pizzas" ("id", "name", "price", "ingredients", "base") VALUES ('6', 'Rucola', '12.0', '["jambon cru","roquette","mozzarella","parmesan"]', 'Nature');
-    `;
-
   try {
-    db = new Database(dbPath);
+    const sqlDataFile = Bun.file("src/db/sql/02-data.sql");
+    const sql = await sqlDataFile.text();
+    db = connectDatabase();
     db.exec(sql);
   } catch (error) {
     console.error(error);

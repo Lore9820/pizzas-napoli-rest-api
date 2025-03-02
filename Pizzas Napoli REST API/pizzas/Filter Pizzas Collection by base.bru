@@ -5,16 +5,16 @@ meta {
 }
 
 get {
-  url: http://localhost:3000/pizzas?base=Tomate
+  url: http://localhost:3000/pizzas?price=6&base=Crème
   body: none
   auth: none
 }
 
 params:query {
-  base: Tomate
-  ~price: 6
+  price: 6
+  base: Crème
+  ~base: Tomate
   ~name: Marinara
-  ~base: Crème
   ~base: Nature
 }
 
